@@ -84,7 +84,7 @@
       list(S.address).map(esc).join("<br>") + "<br>" +
       '<a href="mailto:' + esc(S.email) + '">' + esc(S.email) + "</a>" +
       (S.showPhone && S.phone ? " &middot; " + esc(S.phone) : "") + "</address>" +
-      "<div>" + linkIcons(false) + '<p class="small" style="margin-top:1rem">&copy; ' + new Date().getFullYear() + " " + esc(S.name) + "</p></div></div>";
+      "<div>" + linkIcons(false) + '<p class="small" style="margin-top:1rem">&copy; ' + (S.copyrightYear || new Date().getFullYear()) + " " + esc(S.name) + "</p></div></div>";
   }
 
   function head(title, lede) {
@@ -166,13 +166,13 @@
     var news = list(window.NEWS);
     var html =
       '<section class="intro"><div>' +
-      "<h1>" + esc(S.name) + "</h1>" +
-      '<p class="role">' + esc(S.position) + " &middot; " + esc(S.field) + "<br>" + esc(S.affiliation) + "</p>" +
+      "<h1>" + esc(S.honorific ? S.honorific + " " : "") + esc(S.name) + "</h1>" +
+      '<p class="role">' + esc(S.position) + " &middot; " + esc(S.degree ? S.degree + " " : "") + esc(S.field) + "<br>" + esc(S.affiliation) + "</p>" +
       '<div class="about">' + list(P.about).map(function (p) { return "<p>" + p + "</p>"; }).join("") + "</div>" +
       '<div style="display:flex;flex-wrap:wrap;align-items:center;gap:.5rem">' + linkIcons(true) +
       '<a class="btn" href="' + esc(S.cv) + '" style="margin-top:1.5rem">' + icon("download") + "CV (PDF)</a></div>" +
       "</div>" +
-      '<figure class="portrait"><img src="assets/img/portrait.jpg" alt="Portrait of ' + esc(S.name) + '" width="647" height="764">' +
+      '<figure class="portrait"><img src="assets/img/portrait.jpg" alt="Portrait of ' + esc(S.name) + '" width="800" height="1000">' +
       (list(P.currently).length ? '<figcaption><ul class="currently" style="margin:0">' + list(P.currently).map(function (c) { return "<li>" + c + "</li>"; }).join("") + "</ul></figcaption>" : "") +
       "</figure></section>";
 
@@ -266,13 +266,13 @@
     main.innerHTML = head("Research", "Quantum chemistry and molecular simulation of weak interactions, metal&ndash;biomolecule systems and materials.") +
       R.map(function (r) {
         var rel = PUBS.filter(function (p) { return list(p.tags).some(function (t) { return list(r.tags).indexOf(t) >= 0; }); });
-        return '<article class="theme"><div>' +
+        return '<article class="theme' + (r.image ? '' : ' no-img') + '"><div>' +
           "<h2>" + r.title + "</h2>" + (r.period ? '<div class="period">' + r.period + "</div>" : "") +
           "<p>" + r.text + "</p>" +
           (list(r.keywords).length ? '<ul class="keywords">' + r.keywords.map(function (k) { return "<li>" + k + "</li>"; }).join("") + "</ul>" : "") +
           (rel.length ? "<details><summary>Related publications (" + rel.length + ")</summary><ol>" +
             rel.map(function (p) { return "<li>" + p.title + ". <em>" + p.journal + "</em> " + p.year + (p.doi ? ' <a href="https://doi.org/' + esc(p.doi) + '">DOI</a>' : "") + "</li>"; }).join("") + "</ol></details>" : "") +
-          "</div>" + (r.image ? '<figure><img src="' + esc(r.image) + '" alt=""></figure>' : "<div></div>") + "</article>";
+          "</div>" + (r.image ? '<figure><img src="' + esc(r.image) + '" alt=""></figure>' : "") + "</article>";
       }).join("");
   };
 
@@ -314,16 +314,37 @@
     var html = head(on("group") ? "Group" : "People", on("group") ? "Current members, alumni, mentors and collaborators." : "Mentors and collaborators I have worked with.");
     if (on("group")) {
       html += '<section class="section" style="margin-top:0"><h2>Members</h2>' +
-        (list(P.group).length ? '<div class="grid">' + P.group.map(personCard).join("") + "</div>" : '<p class="muted">No members listed yet.</p>') + "</section>";
-      if (list(P.alumni).length) html += '<section class="section"><h2>Alumni</h2><div class="grid">' + P.alumni.map(personCard).join("") + "</div></section>";
+        (list(P.group).length ? '<div class="grid people-grid">' + P.group.map(personCard).join("") + "</div>" : '<p class="muted">No members listed yet.</p>') + "</section>";
+      if (list(P.alumni).length) html += '<section class="section"><h2>Alumni</h2><div class="grid people-grid">' + P.alumni.map(personCard).join("") + "</div></section>";
     }
-    html += '<section class="section"' + (on("group") ? "" : ' style="margin-top:0"') + '><h2>Mentors</h2><div class="grid">' + list(P.mentors).map(personCard).join("") + "</div></section>" +
-      '<section class="section"><h2>Collaborators</h2><div class="grid">' + list(P.collaborators).map(personCard).join("") + "</div></section>";
-    if (on("gallery") && list(P.gallery).length)
-      html += '<section class="section"><h2>Gallery</h2><div class="gallery">' + P.gallery.map(function (g) {
-        return '<figure><img src="' + esc(g.src) + '" alt="' + esc(g.caption) + '" loading="lazy"><figcaption>' + g.caption + "</figcaption></figure>";
-      }).join("") + "</div></section>";
+    html += '<section class="section"' + (on("group") ? "" : ' style="margin-top:0"') + '><h2>Mentors</h2><div class="grid people-grid">' + list(P.mentors).map(personCard).join("") + "</div></section>" +
+      '<section class="section"><h2>Collaborators</h2><div class="grid people-grid">' + list(P.collaborators).map(personCard).join("") + "</div></section>";
     main.innerHTML = html;
+  };
+
+  PAGES.gallery = function () {
+    var albums = list(window.GALLERY).filter(function (a) { return list(a.photos).length; });
+    main.innerHTML = head("Gallery", "Conferences, events and moments from the lab.") +
+      albums.map(function (a, i) {
+        return '<section class="section"' + (i === 0 ? ' style="margin-top:0"' : "") + "><h2>" + a.title +
+          (a.date ? '<span class="more muted">' + a.date + "</span>" : "") + "</h2>" +
+          (a.text ? '<p class="muted" style="max-width:var(--text)">' + a.text + "</p>" : "") +
+          '<div class="gallery">' + list(a.photos).map(function (p) {
+            return '<figure><a href="' + esc(p.src) + '" data-zoom><img src="' + esc(p.src) + '" alt="' + esc(plain(p.caption || a.title)) + '" loading="lazy"></a>' +
+              (p.caption ? "<figcaption>" + p.caption + "</figcaption>" : "") + "</figure>";
+          }).join("") + "</div></section>";
+      }).join("") +
+      '<dialog class="zoom" id="zoom"><img alt=""><button type="button" class="icon-btn" aria-label="Close">&times;</button></dialog>';
+    var dlg = document.getElementById("zoom");
+    main.addEventListener("click", function (e) {
+      var a = e.target.closest("[data-zoom]");
+      if (!a || !dlg.showModal) return;
+      e.preventDefault();
+      dlg.querySelector("img").src = a.getAttribute("href");
+      dlg.querySelector("img").alt = a.querySelector("img").alt;
+      dlg.showModal();
+    });
+    dlg.addEventListener("click", function () { dlg.close(); });
   };
 
   PAGES.cv = function () {
@@ -371,7 +392,7 @@
   };
 
   /* Pages switched off in config.js send visitors back to the home page. */
-  var GATED = { teaching: "teaching", blog: "blog", join: "openings" };
+  var GATED = { teaching: "teaching", blog: "blog", join: "openings", gallery: "gallery" };
 
   header();
   footer();

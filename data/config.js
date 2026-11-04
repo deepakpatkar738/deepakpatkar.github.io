@@ -9,6 +9,7 @@ window.SITE = {
   shortName: "D. Patkar",          // shown in the top bar on small screens
   honorific: "Dr.",
   position: "Postdoctoral Fellow",
+  degree: "PhD",                  // shown before the field on the home page
   field: "Theoretical & Computational Chemistry",
   affiliation: "Fujian Institute of Research on the Structure of Matter (FJIRSM), Chinese Academy of Sciences",
   affiliationShort: "FJIRSM, Chinese Academy of Sciences",
@@ -21,6 +22,7 @@ window.SITE = {
   phone: "+91-7974929700",
   showPhone: false,                // true = phone number appears in the footer
   cv: "DP_CV.pdf",
+  copyrightYear: 2025,             // year shown in the footer
 
   /* Name highlighted in every author list. Add other spellings if needed. */
   myNames: ["Patkar, D.", "Patkar, D"],
@@ -34,8 +36,8 @@ window.SITE = {
     group:    false,   // "Group" section on the People page (students, alumni)
     teaching: false,   // Teaching page (your own courses)
     openings: false,   // "Join us" page + notice on the home page
-    blog:    false,   // Blog page
-    gallery:  false,   // Photo gallery on the People page
+    blog:     true,    // Blog page
+    gallery:  true,    // Gallery page
     citationStats: false  // citation / h-index numbers on Publications (fill in below)
   },
 
@@ -51,9 +53,9 @@ window.SITE = {
     { id: "kaggle",       label: "Kaggle",         url: "https://www.kaggle.com/deepakpatkar", show: true },
     { id: "linkedin",     label: "LinkedIn",       url: "https://www.linkedin.com/in/deepak-patkar/", show: true },
     { id: "x",            label: "X",              url: "https://x.com/deepakpatkar738", show: true },
-    { id: "youtube",      label: "YouTube",        url: "https://www.youtube.com/channel/UC-IOL4JxS0_uPtq9tIpsG6g", show: false },
-    { id: "facebook",     label: "Facebook",       url: "https://www.facebook.com/deepakpatkar738", show: false },
-    { id: "instagram",    label: "Instagram",      url: "https://www.instagram.com/deepakpatkar738", show: false }
+    { id: "youtube",      label: "YouTube",        url: "https://www.youtube.com/channel/UC-IOL4JxS0_uPtq9tIpsG6g", show: true },
+    { id: "facebook",     label: "Facebook",       url: "https://www.facebook.com/deepakpatkar738", show: true },
+    { id: "instagram",    label: "Instagram",      url: "https://www.instagram.com/deepakpatkar738", show: true }
   ],
 
   /* Menu. "feature" ties an item to a switch above. */
@@ -65,6 +67,7 @@ window.SITE = {
     { label: "Talks",        href: "talks.html" },
     { label: "People",       href: "people.html" },
     { label: "Teaching",     href: "teaching.html", feature: "teaching" },
+    { label: "Gallery",      href: "gallery.html",  feature: "gallery" },
     { label: "Blog",         href: "blog.html",     feature: "blog" },
     { label: "Join us",      href: "join.html",     feature: "openings" },
     { label: "CV",           href: "cv.html" }

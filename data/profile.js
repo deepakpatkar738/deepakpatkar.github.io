@@ -22,12 +22,18 @@ window.PROFILE = {
      in publications.js. */
   research: [
     {
-      title: "Hydrogen-bond energetics and cooperativity",
+      title: "Noncovalent interactions",
       tags: ["mta"],
       period: "2019 &ndash; present",
-      image: "assets/img/gallery/hydrogen-bond-model.png",
-      text: "How strong is one hydrogen bond inside a network of many? The Molecular Tailoring Approach answers this by removing donor and acceptor groups one at a time and comparing energies. I have used it to rank individual hydrogen bonds and to separate their cooperative contributions in water, ammonia, methanol, HF, H<sub>2</sub>S and mixed clusters. Some of these clusters show unusually large cooperativity.",
-      keywords: ["molecular clusters", "MTA", "cooperativity", "noncovalent interactions"]
+      text: "Hydrogen bonds and other weak contacts rarely act alone. In a network, each one strengthens or weakens its neighbours. My work asks how much a single interaction contributes inside such a network, and develops the methods to answer that. With the <strong>Molecular Tailoring Approach (MTA)</strong>, I estimate individual hydrogen-bond energies directly in the parent molecule or cluster, and separate the cooperative part of each bond from its intrinsic strength. I complement this with <strong>many-body expansion</strong> to split the total binding into two-, three- and higher-body terms; <strong>SAPT</strong> to decompose interaction energies into electrostatics, exchange, induction and dispersion; <strong>MESP</strong> topography to locate donor and acceptor sites; and <strong>QTAIM</strong> to characterise each contact through its bond critical point. Together these give a consistent picture of water, ammonia, methanol, HF, H<sub>2</sub>S and mixed clusters, and of halogen-substituted organic molecules, including cases of unusually large cooperativity.",
+      keywords: ["Molecular Tailoring Approach", "many-body expansion", "SAPT", "MESP", "QTAIM", "H-bond cooperativity"]
+    },
+    {
+      title: "Reaction mechanisms and catalysis",
+      tags: ["catalysis"],
+      period: "2019 &ndash; present",
+      text: "Quantum-chemical studies of reaction pathways, transition states and IRC profiles, covering transition-metal catalysed C&ndash;H activation and C&ndash;C bond formation, and main-group (calcium) catalysts for sustainable chemistry.",
+      keywords: ["DFT", "transition states", "main-group catalysis"]
     },
     {
       title: "Copper&ndash;peptide phase separation and metalloproteins",
@@ -42,13 +48,6 @@ window.PROFILE = {
       period: "2025 &ndash; present",
       text: "I use supervised learning to screen materials and to link quantum-chemical descriptors with properties. I am also interested in atomistic machine learning, cheminformatics and inverse molecular design.",
       keywords: ["supervised learning", "materials screening", "cheminformatics"]
-    },
-    {
-      title: "Reaction mechanisms and catalysis",
-      tags: ["catalysis"],
-      period: "",
-      text: "Quantum-chemical studies of reaction pathways, transition states and IRC profiles, covering transition-metal catalysed C&ndash;H activation and C&ndash;C bond formation, and main-group (calcium) catalysts for sustainable chemistry.",
-      keywords: ["DFT", "transition states", "main-group catalysis"]
     }
   ]
 };

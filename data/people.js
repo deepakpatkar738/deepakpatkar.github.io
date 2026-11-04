@@ -2,6 +2,7 @@
    PEOPLE
    mentors / collaborators: always shown.
    group / alumni: shown only when features.group is true (config.js).
+   The photo gallery now lives in gallery.js.
    Emails are written as name[at]domain so robots cannot harvest them.
    ========================================================================== */
 
@@ -57,11 +58,5 @@ window.PEOPLE = {
      { name: "Jane Doe", title: "PhD student (2028&ndash;)", org: "Topic: ...",
        photo: "assets/img/people/jane.jpg", links: [], email: "" }        */
   group: [],
-  alumni: [],
-
-  /* ---- Photo gallery (features.gallery) ---------------------------------- */
-  gallery: [
-    { src: "assets/img/gallery/phd-thesis-submission.png", caption: "PhD thesis submission" },
-    { src: "assets/img/gallery/hydrogen-bond-model.png", caption: "Hydrogen-bonded molecular cluster" }
-  ]
+  alumni: []
 };
