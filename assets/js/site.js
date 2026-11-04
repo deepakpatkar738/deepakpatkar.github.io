@@ -413,7 +413,8 @@
   PAGES.blog = function () {
     var posts = list(window.POSTS);
     function slug(s) { return plain(s).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""); }
-    function paras(a) { return list(a).map(function (b) { return "<p>" + b + "</p>"; }).join(""); }
+    /* a body line that already starts with <p ...> or <table> is used as-is */
+    function paras(a) { return list(a).map(function (b) { return /^<(p[ >]|table)/.test(b) ? b : "<p>" + b + "</p>"; }).join(""); }
     function words(p) {
       var t = plain(p.summary || "") + " " + list(p.body).map(plain).join(" ") + " " +
         list(p.sections).map(function (s) { return list(s.body).map(plain).join(" "); }).join(" ");
@@ -423,7 +424,7 @@
     var toc = "", articles = "";
     posts.forEach(function (p) {
       var pid = slug(p.title);
-      toc += '<li><a href="#' + pid + '" class="toc-post">' + p.title + "</a>";
+      toc += '<li data-post="' + pid + '"' + (toc ? "" : ' class="open"') + '><a href="#' + pid + '" class="toc-post">' + p.title + "</a>";
       if (list(p.sections).length) {
         toc += "<ol>" + p.sections.map(function (s) {
           return '<li><a href="#' + pid + "--" + slug(s.heading) + '">' + s.heading + "</a></li>";
@@ -458,6 +459,11 @@
           if (!en.isIntersecting || !tocLinks[en.target.id]) return;
           main.querySelectorAll(".toc a.active").forEach(function (x) { x.classList.remove("active"); });
           tocLinks[en.target.id].classList.add("active");
+          /* open only the contents of the post being read */
+          var post = en.target.closest(".post");
+          main.querySelectorAll(".toc li[data-post]").forEach(function (li) {
+            li.classList.toggle("open", !!post && li.getAttribute("data-post") === post.id);
+          });
         });
       }, { rootMargin: "-15% 0px -70% 0px" });
       main.querySelectorAll(".post h3[id], .post[id]").forEach(function (el) { io.observe(el); });

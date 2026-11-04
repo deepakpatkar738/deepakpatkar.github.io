@@ -260,7 +260,9 @@ a.tag:hover, button.tag:hover { border-color: var(--accent); color: var(--accent
 .toc-inner { border-left: 1px solid var(--rule-2); padding-left: 1.1rem; }
 .toc-title { font-family: var(--mono); font-size: .72rem; text-transform: uppercase; letter-spacing: .08em; color: var(--ink-3); margin-bottom: .6rem; }
 .toc ol { list-style: none; margin: 0; padding: 0; }
-.toc ol ol { margin: .35rem 0 .9rem; }
+.toc ol ol { margin: .35rem 0 .9rem; display: none; }
+.toc li.open > ol { display: block; }
+.toc > .toc-inner > ol > li { margin-bottom: .55rem; }
 .toc a { display: block; color: var(--ink-2); font-size: .88rem; line-height: 1.4; padding: .22rem 0; }
 .toc a.toc-post { color: var(--ink); font-weight: 600; font-family: var(--serif); font-size: .98rem; }
 .toc a:hover { color: var(--accent); text-decoration: none; }
@@ -316,3 +318,13 @@ dialog.zoom figcaption { color: #e7e5e0; font-size: .95rem; margin-top: .75rem; 
 .znext { right: 1rem; top: 50%; transform: translateY(-50%); }
 .zcount { position: fixed; top: 1.4rem; left: 1.25rem; color: #c9ccd0; font: .85rem var(--mono); }
 @media (max-width: 600px) { .zprev, .znext { top: auto; bottom: 1rem; transform: none; } }
+
+/* blog: equations and data tables */
+.post p.eq { text-align: center; font-family: var(--serif); font-size: 1.08rem; margin: 1.1rem 0 1.3rem;
+  padding: .7rem 1rem; background: var(--surface); border: 1px solid var(--rule); border-radius: var(--radius); overflow-x: auto; }
+.post table.data { border-collapse: collapse; width: 100%; margin: 1rem 0 1.5rem; font-size: .9rem; }
+.post table.data caption { caption-side: bottom; text-align: left; font-size: .8rem; color: var(--ink-3); padding-top: .4rem; }
+.post table.data th, .post table.data td { padding: .45rem .6rem; border-bottom: 1px solid var(--rule); text-align: left; }
+.post table.data thead th { border-bottom: 1.5px solid var(--ink-3); font-weight: 600; color: var(--ink); }
+.post table.data td:not(:first-child) { font-variant-numeric: tabular-nums; }
+@media (max-width: 600px) { .post table.data { display: block; overflow-x: auto; } }
