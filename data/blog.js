@@ -130,12 +130,7 @@ window.POSTS = [
         heading: "Where MTA and MBE meet",
         body: [
           "If each fragment energy in the MTA formula is written out with the MBE, the terms cancel in a simple pattern. Any many-body term whose molecules do not include both <em>i</em> and <em>j</em> cancels exactly. Any term whose molecules include both survives, once. The MTA bond energy is therefore, exactly:",
-          EQ("mta-mbe", "E_HB,ij(MTA) = two-body term ij + every 3-, 4-, ..., n-body term containing both i and j"),
-          "For a ring of three molecules A, B and C, the bond between A and B is simply its pair term plus the one three-body term:",
-          EQ("trimer", "E_HB,AB(MTA) = Delta E(2)AB + Delta E(3)ABC"),
-          "For a ring of four, the bond between A and B collects every term that contains both A and B:",
-          EQ("tetramer", "E_HB,AB(MTA) = Delta E(2)AB + Delta E(3)ABC + Delta E(3)ABD + Delta E(4)ABCD"),
-          "The relation holds for any cluster size."
+          EQ("mta-mbe", "E_HB,ij(MTA) = two-body term ij + every 3-, 4-, ..., n-body term containing both i and j")
         ]
       },
       {
