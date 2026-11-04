@@ -265,13 +265,10 @@
     var R = list((window.PROFILE || {}).research);
     main.innerHTML = head("Research", "Quantum chemistry and molecular simulation of weak interactions, metal&ndash;biomolecule systems and materials.") +
       R.map(function (r) {
-        var rel = PUBS.filter(function (p) { return list(p.tags).some(function (t) { return list(r.tags).indexOf(t) >= 0; }); });
         return '<article class="theme' + (r.image ? '' : ' no-img') + '"><div>' +
           "<h2>" + r.title + "</h2>" + (r.period ? '<div class="period">' + r.period + "</div>" : "") +
           "<p>" + r.text + "</p>" +
           (list(r.keywords).length ? '<ul class="keywords">' + r.keywords.map(function (k) { return "<li>" + k + "</li>"; }).join("") + "</ul>" : "") +
-          (rel.length ? "<details><summary>Related publications (" + rel.length + ")</summary><ol>" +
-            rel.map(function (p) { return "<li>" + p.title + ". <em>" + p.journal + "</em> " + p.year + (p.doi ? ' <a href="https://doi.org/' + esc(p.doi) + '">DOI</a>' : "") + "</li>"; }).join("") + "</ol></details>" : "") +
           "</div>" + (r.image ? '<figure><img src="' + esc(r.image) + '" alt=""></figure>' : "") + "</article>";
       }).join("");
   };
@@ -413,8 +410,8 @@
   PAGES.blog = function () {
     var posts = list(window.POSTS);
     function slug(s) { return plain(s).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""); }
-    /* a body line that already starts with <p ...> or <table> is used as-is */
-    function paras(a) { return list(a).map(function (b) { return /^<(p[ >]|table)/.test(b) ? b : "<p>" + b + "</p>"; }).join(""); }
+    /* a body line that already starts with <p ...>, <table> or <figure> is used as-is */
+    function paras(a) { return list(a).map(function (b) { return /^<(p[ >]|table|figure)/.test(b) ? b : "<p>" + b + "</p>"; }).join(""); }
     function words(p) {
       var t = plain(p.summary || "") + " " + list(p.body).map(plain).join(" ") + " " +
         list(p.sections).map(function (s) { return list(s.body).map(plain).join(" "); }).join(" ");

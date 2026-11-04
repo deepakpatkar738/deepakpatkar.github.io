@@ -1,0 +1,10 @@
+# One equation per line:  name | LaTeX (math mode)
+# Run:  python tools/make_equations.py   -> writes assets/img/eq/<name>.svg
+mta     | E_{\mathrm{HB}}^{\mathrm{MTA}}=\bigl[E(F_1)+E(F_2)-E(F_{12})\bigr]-E(M)
+dimer   | E_{\mathrm{HB}}^{\mathrm{Dimer}}=E(\mathrm{M}_1)+E(\mathrm{M}_2)-E(\mathrm{M}_1\cdots\mathrm{M}_2)
+coop    | E_{\mathrm{HB}}^{\mathrm{Coop}}=E_{\mathrm{HB}}^{\mathrm{MTA}}-E_{\mathrm{HB}}^{\mathrm{Dimer}}
+mbe     | \Delta E_{1\ldots n}=\sum_{m=2}^{n}\sum_{S_m}\Delta E_{S_m}^{(m)}
+mta-mbe | E_{\mathrm{HB}_{ij}}^{\mathrm{MTA}}=\Delta E_{ij}^{(2)}+\sum_{m=3}^{n}\sum_{S_m\ni i,j}\Delta E_{S_m}^{(m)}
+coop-mbe| E_{\mathrm{HB}_{ij}}^{\mathrm{Coop}}\equiv E_{\mathrm{HB}_{ij}}^{\mathrm{MTA}}-\Delta E_{ij}^{(2)}=\sum_{m=3}^{n}\sum_{S_m\ni i,j}\Delta E_{S_m}^{(m)}
+trimer  | E_{\mathrm{HB}_{AB}}^{\mathrm{MTA}}=\Delta E_{AB}^{(2)}+\Delta E_{ABC}^{(3)}
+tetramer| E_{\mathrm{HB}_{AB}}^{\mathrm{MTA}}=\Delta E_{AB}^{(2)}+\Delta E_{ABC}^{(3)}+\Delta E_{ABD}^{(3)}+\Delta E_{ABCD}^{(4)}
