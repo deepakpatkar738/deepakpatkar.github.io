@@ -7,9 +7,7 @@ window.PROFILE = {
 
   /* Home page, next to the photo. One string per paragraph. */
   about: [
-    "I am a theoretical and computational chemist. My PhD work quantified individual hydrogen-bond energies and their cooperativity in molecular clusters, using the <strong>Molecular Tailoring Approach (MTA)</strong>.",
-    "As a Postdoctoral Fellow at FJIRSM, Chinese Academy of Sciences, I study copper&ndash;peptide mediated liquid&ndash;liquid phase separation with molecular dynamics simulations. I also apply supervised machine learning to materials screening.",
-    "More broadly, I am interested in noncovalent interactions, transition-metal and main-group chemistry, biomolecular simulation, and connecting quantum chemistry with data-driven methods."
+    "I am a theoretical and computational chemist. My PhD work quantified individual hydrogen-bond energies and their cooperativity in molecular clusters, using the <strong>Molecular Tailoring Approach (MTA)</strong>. As a Postdoctoral Fellow at FJIRSM, Chinese Academy of Sciences, I now study copper&ndash;peptide mediated liquid&ndash;liquid phase separation with molecular dynamics simulations, and apply supervised machine learning to materials screening. More broadly, I am interested in noncovalent interactions, transition-metal and main-group chemistry, biomolecular simulation, and connecting quantum chemistry with data-driven methods."
   ],
 
   /* Short list shown on the home page under "Currently". */

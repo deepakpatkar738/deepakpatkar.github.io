@@ -334,17 +334,47 @@
               (p.caption ? "<figcaption>" + p.caption + "</figcaption>" : "") + "</figure>";
           }).join("") + "</div></section>";
       }).join("") +
-      '<dialog class="zoom" id="zoom"><img alt=""><button type="button" class="icon-btn" aria-label="Close">&times;</button></dialog>';
+      '<dialog class="zoom" id="zoom" aria-label="Photo viewer">' +
+      '<figure><img alt=""><figcaption></figcaption></figure>' +
+      '<button type="button" class="zbtn zclose" aria-label="Close">&times;</button>' +
+      '<button type="button" class="zbtn zprev" aria-label="Previous photo">&#8249;</button>' +
+      '<button type="button" class="zbtn znext" aria-label="Next photo">&#8250;</button>' +
+      '<span class="zcount"></span></dialog>';
+
+    /* Photo viewer: click a photo, then use the arrows, arrow keys or swipe. */
     var dlg = document.getElementById("zoom");
+    var links = Array.prototype.slice.call(main.querySelectorAll("[data-zoom]"));
+    var cur = 0;
+    function show(i) {
+      cur = (i + links.length) % links.length;
+      var a = links[cur], cap = a.parentNode.querySelector("figcaption");
+      dlg.querySelector("img").src = a.getAttribute("href");
+      dlg.querySelector("img").alt = a.querySelector("img").alt;
+      dlg.querySelector("figcaption").innerHTML = cap ? cap.innerHTML : "";
+      dlg.querySelector(".zcount").textContent = (cur + 1) + " / " + links.length;
+    }
     main.addEventListener("click", function (e) {
       var a = e.target.closest("[data-zoom]");
       if (!a || !dlg.showModal) return;
       e.preventDefault();
-      dlg.querySelector("img").src = a.getAttribute("href");
-      dlg.querySelector("img").alt = a.querySelector("img").alt;
+      show(links.indexOf(a));
       dlg.showModal();
     });
-    dlg.addEventListener("click", function () { dlg.close(); });
+    dlg.querySelector(".zprev").addEventListener("click", function (e) { e.stopPropagation(); show(cur - 1); });
+    dlg.querySelector(".znext").addEventListener("click", function (e) { e.stopPropagation(); show(cur + 1); });
+    dlg.querySelector(".zclose").addEventListener("click", function () { dlg.close(); });
+    dlg.addEventListener("click", function (e) { if (e.target === dlg) dlg.close(); });
+    dlg.addEventListener("keydown", function (e) {
+      if (e.key === "ArrowLeft") show(cur - 1);
+      if (e.key === "ArrowRight") show(cur + 1);
+    });
+    var x0 = null;
+    dlg.addEventListener("touchstart", function (e) { x0 = e.touches[0].clientX; }, { passive: true });
+    dlg.addEventListener("touchend", function (e) {
+      if (x0 === null) return;
+      var dx = e.changedTouches[0].clientX - x0; x0 = null;
+      if (Math.abs(dx) > 40) show(cur + (dx < 0 ? 1 : -1));
+    });
   };
 
   PAGES.cv = function () {
@@ -381,14 +411,57 @@
   };
 
   PAGES.blog = function () {
+    var posts = list(window.POSTS);
+    function slug(s) { return plain(s).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""); }
+    function paras(a) { return list(a).map(function (b) { return "<p>" + b + "</p>"; }).join(""); }
+    function words(p) {
+      var t = plain(p.summary || "") + " " + list(p.body).map(plain).join(" ") + " " +
+        list(p.sections).map(function (s) { return list(s.body).map(plain).join(" "); }).join(" ");
+      return t.split(/\s+/).filter(Boolean).length;
+    }
+
+    var toc = "", articles = "";
+    posts.forEach(function (p) {
+      var pid = slug(p.title);
+      toc += '<li><a href="#' + pid + '" class="toc-post">' + p.title + "</a>";
+      if (list(p.sections).length) {
+        toc += "<ol>" + p.sections.map(function (s) {
+          return '<li><a href="#' + pid + "--" + slug(s.heading) + '">' + s.heading + "</a></li>";
+        }).join("") + (list(p.refs).length || typeof p.refs === "string" ? '<li><a href="#' + pid + '--references">References</a></li>' : "") + "</ol>";
+      }
+      toc += "</li>";
+
+      var refs = typeof p.refs === "string" ? [p.refs] : list(p.refs);
+      articles += '<article class="post" id="' + pid + '">' +
+        '<div class="meta">' + [p.date].concat(list(p.tags)).join(" &middot; ") + " &middot; " + Math.max(1, Math.round(words(p) / 200)) + " min read</div>" +
+        "<h2>" + p.title + "</h2>" +
+        (p.summary ? '<p class="lede">' + p.summary + "</p>" : "") +
+        (p.image ? '<figure class="post-fig"><img src="' + esc(p.image) + '" alt="">' + (p.imageCaption ? "<figcaption>" + p.imageCaption + "</figcaption>" : "") + "</figure>" : "") +
+        paras(p.body) +
+        list(p.sections).map(function (s) {
+          return '<h3 id="' + pid + "--" + slug(s.heading) + '">' + s.heading + "</h3>" + paras(s.body);
+        }).join("") +
+        (refs.length ? '<h3 id="' + pid + '--references">References</h3><ol class="refs">' + refs.map(function (r) { return "<li>" + r + "</li>"; }).join("") + "</ol>" : "") +
+        "</article>";
+    });
+
     main.innerHTML = head("Blog", "Notes on chemistry, computation and the history of ideas.") +
-      list(window.POSTS).map(function (p) {
-        return '<article class="post"><h2>' + p.title + "</h2>" +
-          '<div class="meta">' + [p.date].concat(list(p.tags)).join(" &middot; ") + "</div>" +
-          (p.image ? '<img src="' + esc(p.image) + '" alt="">' : "") +
-          list(p.body).map(function (b) { return "<p>" + b + "</p>"; }).join("") +
-          (p.refs ? '<p class="refs">' + p.refs + "</p>" : "") + "</article>";
-      }).join("");
+      '<div class="blog-layout"><div class="blog-main">' + articles + "</div>" +
+      '<aside class="toc" aria-label="Contents"><div class="toc-inner"><div class="toc-title">Contents</div><ol>' + toc + "</ol></div></aside></div>";
+
+    /* highlight the section currently on screen */
+    if ("IntersectionObserver" in window) {
+      var tocLinks = {};
+      main.querySelectorAll(".toc a").forEach(function (a) { tocLinks[a.getAttribute("href").slice(1)] = a; });
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) {
+          if (!en.isIntersecting || !tocLinks[en.target.id]) return;
+          main.querySelectorAll(".toc a.active").forEach(function (x) { x.classList.remove("active"); });
+          tocLinks[en.target.id].classList.add("active");
+        });
+      }, { rootMargin: "-15% 0px -70% 0px" });
+      main.querySelectorAll(".post h3[id], .post[id]").forEach(function (el) { io.observe(el); });
+    }
   };
 
   /* Pages switched off in config.js send visitors back to the home page. */
